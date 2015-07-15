@@ -1,0 +1,375 @@
+#Constellation {
+  @import "velocity.less";
+
+  .constellationVelocity {
+    text-align: center;
+    white-space: normal;
+	line-height: auto;
+  }
+
+  .constellationVelocity-icon-status {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background: white;
+    border: 4px solid @velocity-blue;
+    border-radius: 100%;
+    position: relative;
+    font: @velocity-font;
+    font-size: 10px;
+    vertical-align: middle;
+    text-align: center;
+    color: white;
+
+    &:before {
+      content: '';
+      display: block;
+      position: absolute;
+      top: 25%;
+      left: 25%;
+      width: 50%;
+      height: 50%;
+      background: @velocity-blue-dark;
+      border-radius: 100%;
+      font-style: normal;
+    }
+  }
+  &.failed, .failed {
+    .constellationVelocity-icon-status {
+      background: @velocity-red;
+      &:before {
+        content: '✖';
+        background: transparent;
+      }
+    }
+  }
+  &.passed, .passed {
+    .constellationVelocity-icon-status {
+      background: @velocity-green;
+      &:before {
+        content: '✔';
+        background: transparent;
+      }
+    }
+  }
+  &.pending, .pending {
+    .constellationVelocity-icon-status {
+      &:before {
+        -webkit-animation: @velocity-anim-throb;
+        animation: @velocity-anim-throb;
+      }
+    }
+  }
+
+  .constellationVelocity-summary .constellationVelocity-icon-status {
+    vertical-align: -28px;
+  }
+
+  .constellationVelocity-icon-total {
+    display: inline-block;
+    min-width: 20px;
+    background: white;
+    border: 2px solid @velocity-blue;
+    border-radius: 2px;
+    padding: 2px 0 8px;
+    font-style: normal;
+    font-family: @velocity-font;
+    font-size: 13px;
+
+    small {
+      font-family: @velocity-font-light;
+      font-weight: 100;
+      text-transform: uppercase;
+      font-size: 8px;
+      margin-top: 6px;
+      display: block;
+      letter-spacing: 4px;
+    }
+  }
+  &.failed .constellationVelocity-icon-total {
+    border-color: @velocity-red;
+  }
+  &.passed .constellationVelocity-icon-total {
+    border-color: @velocity-green;
+  }
+
+  .constellationVelocity-icon-time {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background: transparent url("icon-time.png") no-repeat center;
+    background-size: 100%;
+    border: solid 2px @velocity-grey;
+    border-radius: 100%;
+    vertical-align: 6px;
+    font-style: normal;
+    font-family: @velocity-font-light;
+    font-weight: 100;
+    font-size: 8px;
+    line-height: 20px;
+  }
+
+  .constellationVelocity-summary-text {
+    font-family: @velocity-font;
+    color: rgba(255,255,255,0.92);
+	text-align: center;
+  }
+
+  .constellationVelocity-options {
+    margin: 0 0 0 8px;
+	text-align: center;
+  }
+
+  .constellationVelocity-options-toggle {
+    border: solid 1px #ddd;
+    border-radius: 3px;
+    background: #efefef;
+    opacity: 0.4;
+    padding: 5px 5px 4px;
+    margin: 0;
+    line-height: 1;
+    transition: opacity 0.25s ease-in-out;
+    &:hover {
+      opacity: 0.9;
+    }
+    &:focus {
+      outline: none;
+    }
+  }
+
+  .constellationVelocity-options .constellation-menu-button {
+    color: rgba(255, 255, 255, 0.92);
+  }
+
+  .constellationVelocity-report {
+    margin: 0 0 7px 0;
+  }
+
+  .constellationVelocity-section-header {
+
+    .constellationVelocity-section-name {
+      background: inherit;
+      color: #AAA;
+	  width: 100%;
+	  background-color: rgba(0,0,0,0.4);
+	  display: block;
+	  padding: 2px 0;
+    }
+  }
+
+  .constellationVelocity-suite {
+    border-bottom: solid 1px #efefef;
+    padding-bottom: 10px;
+    &:last-child {
+      border-bottom: 0 none;
+      padding-bottom: 0;
+    }
+  }
+
+  .constellationVelocity-report .constellationVelocity-icon-status {
+  }
+
+  .constellationVelocity-suite-header {
+    font-family: @velocity-font;
+    font-weight: 600;
+    letter-spacing: 1px;
+    margin: 6px 0 4px 0;
+    text-align: left;
+
+    &.passed {
+      color: @velocity-green;
+    }
+    &.failed {
+      color: @velocity-red;
+    }
+  }
+
+  // TODO: simplify! We only show the time symbol on passing suites, for the first suite header
+  .constellationVelocity-report.passed .constellationVelocity-icon-status + .constellationVelocity-suite {
+    position: relative;
+    &:before {
+      content: '';
+      display: block;
+      position: absolute;
+      top: -20px;
+      right: 7px;
+      width: 34px;
+      height: 34px;
+      background: transparent url("icon-time.png") no-repeat center;
+      background-size: 100%;
+    }
+  }
+
+  .constellationVelocity-result-table {
+    width: 100%;
+    text-align: left;
+	font-size: smaller;
+	line-height: 16px;
+
+    .constellationVelocity-test-name,
+    .constellationVelocity-test-time {
+      letter-spacing: 1px;
+	  border-top: 1px dashed rgba(255,255,255,0.2);
+    }
+    .constellationVelocity-test-time {
+      text-align: right;
+      font-family: @velocity-font-mono;
+	  vertical-align: top;
+	  min-width: 40px;
+    }
+	.constellationVelocity-test-name {
+	  overflow: auto;
+	  max-width: 225px;
+	}
+  }
+
+  .constellationVelocity-test.failed .constellationVelocity-test-time {
+    color: @velocity-red;
+  }
+
+  .constellationVelocity-test.passed .constellationVelocity-test-time {
+    color: @velocity-green
+  }
+
+  .constellationVelocity-fail-msg {
+    color: #fff;
+    font-size: 16px;
+  }
+
+  .constellationVelocity-fail-msg .constellationVelocity-icon-status {
+    width: 20px;
+    height: 20px;
+    border-width: 0px;
+    font-size: 10px;
+    color: transparent;
+    margin: 0 8px 0 -36px;
+  }
+
+  .constellationVelocity-stack-trace {
+    font-family: @velocity-font-mono;
+    font-size: 11px;
+    overflow-x: auto;
+  }
+
+  .constellationVelocity-notice-inline,
+  .constellationVelocity-stack-trace {
+    background: rgba(0, 0, 0, 0.2);
+    padding: 2px;
+	font-size: smaller;
+	line-height: 12px;
+    font-size: x-small;
+	max-width: 271px;
+  }
+
+  .btn-constellationVelocity {
+    background: darken(@velocity-blue, 10%);
+    color: rgb(255, 255, 255);
+    border: 0 none;
+    border-radius: 3px;
+    letter-spacing: 1px;
+    padding: 2px 4px;
+    font-family: @velocity-font;
+    opacity: 0.8;
+    transition: opacity 0.2s ease-in-out, background 0.2s ease-in-out;
+	width: 80%;
+	font-size: x-small;
+	margin: 4px;
+	opacity: 0.9;
+	cursor: pointer;
+
+    &:hover {
+      opacity: 1;
+    }
+    &:focus {
+      outline: none;
+    }
+    &.active {
+      background: @velocity-green;
+    }
+  }
+
+  .constellationVelocity-iframe {
+    display: none;
+
+    iframe {
+      width: 100%;
+      margin-bottom: 50px;
+      min-height: 500px;
+      border: @velocity-border;
+    }
+  }
+  .constellationVelocity-iframe.visible {
+    display: block;
+  }
+
+  .constellationVelocity-table-box {
+    max-width: 100%;
+    overflow-x: auto;
+    margin: 0 0 50px;
+  }
+
+  .constellationVelocity-table {
+    min-width: 100%;
+    text-align: left;
+    border-collapse: collapse;
+    margin: 0;
+    td, th {
+      border-bottom: 1px solid rgba(255,255,255,0.2);
+	  padding: 5px 0px;
+      font-size: smaller;
+      line-height: 10px;
+      vertical-align: top;
+    }
+    th {
+      border-bottom: 2px solid rgba(255,255,255,0.2);
+    }
+  }
+   .constellationVelocity-loading {
+     margin-top: 5px;
+   }
+  
+  .constellationVelocity-icon-loading {
+    display: block;
+    margin: 0 auto;
+    width: 20px;
+    height: 20px;
+    background: #4990E2;
+    border-radius: 100%;
+    -webkit-animation: @velocity-anim-throb;
+    animation: @velocity-anim-throb;
+  }
+}
+
+// TODO: tidy up.
+#constellationVelocityResetNotification {
+
+  z-index: 10000;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, .7);
+  font-size: 2em;
+
+  &:before {
+    content: '';
+    display: inline-block;
+    width: 0;
+    height: 100%;
+    vertical-align: middle;
+  }
+
+  .constellationVelocity-notice-inline {
+    background-color: rgba(255, 255, 255, 0.2);
+    width: 100%;
+  }
+}
+
+#constellationVelocity-status-widget {
+  transition: right 0.25s ease-in-out;
+}
+
+#Constellation.Constellation_fullscreen .constellationVelocity-test-name, #Constellation.Constellation_fullscreen .constellationVelocity-stack-trace, #Constellation.Constellation_fullscreen .constellationVelocity-notice-inline {
+  max-width: 100%;
+}

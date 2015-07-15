@@ -1,0 +1,219 @@
+<template name="Constellation_velocity_header">
+ {{> constellationVelocityStatusWidget}}
+</template>
+
+<template name="Constellation_velocity_main">
+  {{> constellationVelocity}}
+</template>
+
+<template name="Constellation_velocity_menu">
+  {{> constellationVelocitySummary}}
+</template>
+
+<template name="Constellation_velocity_subMenu">
+  {{> constellationVelocityControlPanel}}
+</template>
+
+<template name="constellationVelocity">
+
+  <div class="constellationVelocity">
+    {{#if resetting}}
+      {{> constellationVelocityResetNotification}}
+    {{/if}}
+  
+  
+    {{#each frameworks}}
+      {{> constellationVelocityReports}}
+    {{/each}}
+  
+    {{#if active 'showLogs'}}
+        <div class="constellationVelocity-section-header">
+            <span class="constellationVelocity-section-name">Logs</span>
+        </div>
+      {{> constellationVelocityLogs}}
+    {{/if}}
+  
+    {{#if active 'showFiles'}}
+        <div class="constellationVelocity-section-header">
+            <span class="constellationVelocity-section-name">Test files</span>
+        </div>
+      {{> constellationVelocityTestFiles}}
+    {{/if}}
+  
+    {{#if mochaPresent}}
+        <div class="constellationVelocity-iframe {{#if active 'showMochaIframe'}}visible{{/if}}">
+            <div class="constellationVelocity-section-header">
+                <span class="constellationVelocity-section-name">Mocha iframe</span>
+            </div>
+          {{> mochaweb}}
+        </div>
+    {{/if}}
+  </div>
+
+</template>
+
+<template name="constellationVelocityStatusWidget">
+  {{> Constellation_onOffLight isPassedOrPending}}
+</template>
+
+<template name="constellationVelocitySummary">
+  <div class="constellationVelocity-summary-text">
+    {{#if anyFailed}}
+      {{totalFailedTestCount}} {{regularPlural totalFailedTestCount 'test' 's'}} failed
+    {{else}}
+      {{totalPassedTestCount}} {{regularPlural totalPassedTestCount 'test' 's'}} passed in {{totalTime}}
+    {{/if}}
+  </div>
+</template>
+
+<template name="constellationVelocityControlPanel">
+
+    <div class="constellationVelocity-options">
+        <button aria-label="Show passing tests" data-velocity="showSuccessful" class="constellation-menu-button control-toggle {{showActive 'showSuccessful'}}">Show Passing Tests</button>
+        <button aria-label="Show files" data-velocity="showFiles" class="constellation-menu-button control-toggle {{showActive 'showFiles'}}">Show Files</button>
+      {{#if mochaPresent}}
+          <button aria-label="Show mocha iframe" data-velocity="showMochaIframe" class="constellation-menu-button control-toggle {{showActive 'showMochaIframe'}}">Mocha iFrame</button>
+      {{/if}}
+      {{#if nightwatchPresent}}
+          <button aria-label="Run nightwatch tests" class="runNightwatchTests constellation-menu-button">Nightwatch Tests</button>
+      {{/if}}
+    </div>
+</template>
+
+<template name="constellationVelocityReports">
+    <section class="constellationVelocity-report {{frameworkStatus}}">
+        <div class="constellationVelocity-section-header">
+            <span class="constellationVelocity-section-name">{{name}}</span>
+        </div>
+
+      {{#if isPassed frameworkStatus}}
+        <div class="constellationVelocity-notice-inline">
+          <i class="constellationVelocity-icon-status"></i>
+        </div>
+      {{/if}}
+
+      {{#unless frameworkTotalTestCount}}
+        {{#if noFrameworkFiles}}
+            <div class="constellationVelocity-notice-inline">
+                It appears that you don't have any tests for this framework. Would you like to add some?
+                <br />
+                <button aria-label="Add sample tests" class="btn-constellationVelocity copy-sample-tests">Add {{name}} sample tests</button>
+            </div>
+        {{else}}
+            <div class="constellationVelocity-loading">
+                <i class="constellationVelocity-icon-loading"></i>
+                Loading ...
+            </div>
+        {{/if}}
+      {{/unless}}
+
+      {{#each suites}}
+        {{#if suiteNotHidden}}
+            <div class="constellationVelocity-suite {{suiteStatus}}">
+                <div class="constellationVelocity-suite-header {{suiteStatus}}">
+                  {{suite}}
+                </div>
+                <table class="constellationVelocity-result-table">
+                    <tbody>
+                    {{#each reports}}
+                      {{> constellationVelocityTestReport}}
+                    {{/each}}
+                    </tbody>
+                </table>
+            </div>
+        {{/if}}
+      {{/each}}
+    </section>
+</template>
+
+<template name="constellationVelocityTestReport">
+  {{#if reportNotHidden}}
+      <tr class="constellationVelocity-test {{#if failed}}failed{{else}}passed{{/if}}">
+          <td class="constellationVelocity-test-name">{{{name}}}</td> {{! XXX triple-stache allows curly quotes, etc. - worth it? }}
+          <td class="constellationVelocity-test-time">{{#if failed}}Fail{{else}}{{duration}} ms{{/if}}</td>
+      </tr>
+    {{#if failed}}
+        <tr>
+            <td class="constellationVelocity-fail-msg" colspan="2">
+                <i class="constellationVelocity-icon-status"></i> {{failureMessage}}
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+              {{#if failureStackTrace}}
+                  <pre class='constellationVelocity-stack-trace'>{{failureStackTrace}}</pre>
+              {{/if}}
+            </td>
+        </tr>
+    {{/if}}
+  {{/if}}
+</template>
+
+<template name="constellationVelocityLogs">
+    <div class="constellationVelocity-table-box">
+        <table id="constellationVelocityLogs" class="constellationVelocity-table">
+            <thead>
+            <tr>
+                <th>Timestamp</th>
+                <th>Level</th>
+                <th>Message</th>
+                <th>Framework</th>
+            </tr>
+            </thead>
+            <tbody>
+            {{#each logs}}
+              {{> constellationVelocityLog}}
+            {{/each}}
+            </tbody>
+        </table>
+    </div>
+</template>
+
+<template name="constellationVelocityLog">
+    <tr class="{{result}}">
+        <td>{{timestamp}}</td>
+        <td>{{level}}</td>
+        <td>{{message}}</td>
+        <td>{{framework}}</td>
+    </tr>
+</template>
+
+<template name="constellationVelocityTestFiles">
+    <div class="constellationVelocity-table-box">
+        <table id="constellationVelocityTestFiles" class="constellationVelocity-table">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Relative Path</th>
+                <th>Target Framework</th>
+                <th>Last Modified</th>
+            </tr>
+            </thead>
+            <tbody>
+            {{#each testFiles}}
+              {{> constellationVelocityTestFile}}
+            {{/each}}
+            </tbody>
+        </table>
+    </div>
+</template>
+
+<template name="constellationVelocityTestFile">
+    <tr class="{{result}}">
+        <td>{{_id}}</td>
+        <td>{{relativePath}}</td>
+        <td>{{targetFramework}}</td>
+        <td>{{lastModified}}</td>
+    </tr>
+</template>
+
+<template name="constellationVelocityResetNotification">
+    <div id="constellationVelocityResetNotification">
+        <div class="constellationVelocity-notice-inline">
+            <div class="constellationVelocity-section-header">
+                <div class="constellationVelocity-section-name">Please wait</div>
+            </div>
+            <p>Velocity is updating your files.</p>
+        </div>
+    </div>
+</template>
