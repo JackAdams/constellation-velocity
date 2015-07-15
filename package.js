@@ -1,7 +1,7 @@
 Package.describe({
   name: 'constellation:velocity',
   summary: 'Reactive Velocity test reports in Constellation',
-  version: '0.1.0',
+  version: '0.1.6',
   git: 'https://github.com/JackAdams/constellation-velocity.git',
   debugOnly: true
 });
@@ -12,7 +12,7 @@ Package.onUse(function(api) {
 
   api.use(['underscore', 'templating','amplify@1.0.0', 'less', 'tracker', 'session'], 'client');
   
-  api.use('constellation:console@1.0.5');
+  api.use('constellation:console@1.0.6');
 
   api.addFiles('lib/reamplify.js', 'client');
 
